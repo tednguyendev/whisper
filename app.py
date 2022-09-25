@@ -11,6 +11,9 @@ def init():
     
     model = whisper.load_model("medium")
 
+def extract(s):
+    return s['text'].strip()
+
 # Inference is ran for every server call
 # Reference your preloaded global model variable here.
 def inference(model_inputs:dict) -> dict:
@@ -33,7 +36,9 @@ def inference(model_inputs:dict) -> dict:
     
     # Run the model
     result = model.transcribe("input.mp3", language=language)
-    output = {"text":result["text"]}
+    output = {
+      "text": ('. ').join(list(map(extract, result['segments']))),
+    }
     os.remove("input.mp3")
     # Return the results as a dictionary
     return output
