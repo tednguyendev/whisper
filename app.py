@@ -20,13 +20,19 @@ def inference(model_inputs:dict) -> dict:
     mp3BytesString = model_inputs.get('mp3BytesString', None)
     if mp3BytesString == None:
         return {'message': "No input provided"}
+
+    language = "en"
+    language_input = model_inputs.get('language', None)
+
+    if not language_input == None:
+        language = language_input
     
     mp3Bytes = BytesIO(base64.b64decode(mp3BytesString.encode("ISO-8859-1")))
     with open('input.mp3','wb') as file:
         file.write(mp3Bytes.getbuffer())
     
     # Run the model
-    result = model.transcribe("input.mp3", language="en")
+    result = model.transcribe("input.mp3", language=language)
     output = {"text":result["text"]}
     os.remove("input.mp3")
     # Return the results as a dictionary
