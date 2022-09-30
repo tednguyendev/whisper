@@ -9,7 +9,7 @@ from io import BytesIO
 def init():
     global model
     
-    model = whisper.load_model("large")
+    model = whisper.load_model("medium")
 
 def extract(s):
     return s['text'].strip()
